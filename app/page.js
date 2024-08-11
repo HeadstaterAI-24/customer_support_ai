@@ -1,3 +1,4 @@
+// file page.js 
 'use client';
 
 import { Box, Stack, Typography, TextField, Button } from '@mui/material';
@@ -8,7 +9,7 @@ import './globals.css'; // Adjust the path based on your project structure
 export default function Home() {
   const [messages, setMessages] = useState([{
     role: 'assistant',
-    content: `Hi, I'm the Headstarter Support Agent. How can I assist you today?`,
+    content: "Hi, I'm the Headstarter Support Agent. How can I assist you today?",
   }]);
 
   const [message, setMessage] = useState('');
@@ -17,52 +18,56 @@ export default function Home() {
   const sendMessage = async () => {
     if (message.trim() === '') return; // Prevent sending empty messages
 
-    setMessage('');
     setMessages((messages) => [
       ...messages,
       { role: 'user', content: message },
-      { role: 'assistant', content: '' },
+      { role: 'assistant', content: '' }, // Placeholder for assistant's response
     ]);
 
-    const response = await fetch('api/chat', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify([...messages, { role: 'user', content: message }])
-    });
+    setMessage(''); // Clear the input field
 
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
+    try {
+      const response = await fetch('/api/chat', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify([...messages, { role: 'user', content: message }])
+      });
 
-    let result = '';
-    return reader.read().then(function processText({ done, value }) {
-      if (done) {
-        // Convert markdown to HTML
-        const htmlResponse = marked(result);
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
 
-        setMessages((messages) => {
-          let lastMessage = messages[messages.length - 1];
-          let otherMessages = messages.slice(0, messages.length - 1);
-          return ([
-            ...otherMessages,
-            {
-              ...lastMessage,
-              content: htmlResponse,
-            },
-          ]);
-        });
-        return result;
-      }
-      const text = decoder.decode(value || new Uint8Array(), { stream: true });
-      result += text;
-      return reader.read().then(processText);
-    });
+      let result = '';
+      reader.read().then(function processText({ done, value }) {
+        if (done) {
+          const htmlResponse = marked(result, { sanitize: true, breaks: true }); // Convert markdown to HTML
+          console.log("HTML response:", htmlResponse); // Debug: check the generated HTML
+
+          setMessages((messages) => {
+            const lastMessage = messages[messages.length - 1];
+            const otherMessages = messages.slice(0, messages.length - 1);
+            return [
+              ...otherMessages,
+              { ...lastMessage, content: htmlResponse }, // Update assistant's response
+            ];
+          });
+
+          return;
+        }
+
+        const text = decoder.decode(value || new Uint8Array(), { stream: true });
+        result += text;
+        reader.read().then(processText);
+      });
+    } catch (error) {
+      console.error("Error fetching chat response:", error);
+    }
   };
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.key === 'Enter' && !event.shiftKey) { // Shift+Enter won't trigger send
+      if (event.key === 'Enter') {
         event.preventDefault(); // Prevent default Enter key behavior (e.g., form submission)
         sendMessage();
       }
@@ -163,21 +168,20 @@ export default function Home() {
                       bgcolor: message.role === 'assistant' ? 'primary.main' : 'secondary.main',
                       color: 'white',
                       borderRadius: 2,
-                      p: 2,
                       maxWidth: '90%',
                       overflowWrap: 'break-word',
-                      padding: '8px 12px', // Adjust padding inside the bubble
+                      padding: '5px', // Ensures content has enough space
+                      overflow: 'hidden', // Prevent content overflow
                     }}
                   >
-                    <div
-                      dangerouslySetInnerHTML={{ __html: message.content }}
-                      style={{
-                        lineHeight: '1.6',
-                        fontSize: '16px',
-                        margin: 0,
-                        padding: 0,
-                      }}
-                    />
+                    {message.content ? (
+                      <div
+                        dangerouslySetInnerHTML={{ __html: message.content }} // Inject HTML content
+                        className="bubble-content"
+                      />
+                    ) : (
+                      <Typography variant="body1">Loading...</Typography> // Fallback while loading
+                    )}
                   </Box>
                 </Box>
               ))}
@@ -188,8 +192,6 @@ export default function Home() {
             <TextField
               label="Message"
               fullWidth
-              multiline // Enable multi-line input
-              maxRows={4} // Limit the max height to 4 rows
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               inputRef={messageInputRef} // Reference to handle key events
