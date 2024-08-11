@@ -1,5 +1,91 @@
+/* Global Styles */
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+
+/* Styles for the chat container */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+}
+
+/* Styles for the chat box */
+.chat-box {
+  width: 600px;
+  height: 700px;
+  border: 1px solid black;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Styles for the message container */
+.message-container {
+  padding: 16px;
+  flex-grow: 1;
+  overflow: auto;
+  max-height: 100%;
+}
+
+/* Bubble content styling */
+.bubble-content {
+  padding: 12px; /* Padding inside the bubble */
+  border-radius: 12px; /* Rounded corners */
+  overflow-wrap: break-word; /* Ensure long words break */
+  word-break: break-word;
+  color: white;
+  margin: 8px 0; /* Space between bubbles */
+}
+
+/* Styling for assistant and user bubbles */
+.bubble-assistant {
+  display: flex;
+  justify-content: flex-start; /* Align to the left */
+}
+
+.bubble-assistant .bubble-content {
+  background-color: #1976d2; /* Assistant bubble color */
+  max-width: 90%; /* Limit the assistant bubble to 90% of the chat box */
+  color: white;
+}
+
+.bubble-user {
+  display: flex;
+  justify-content: flex-end; /* Align to the right */
+}
+
+.bubble-user .bubble-content {
+  background-color: #9c27b0; /* User bubble color */
+  max-width: 90%; /* Limit the user bubble to 90% of the chat box */
+  color: white;
+}
+
+/* List styling inside bubbles */
+.bubble-content ul,
+.bubble-content ol {
+  padding-left: 25px; /* Indentation for list items */
+  margin: 10px 0; /* Vertical spacing around the list */
+}
+
+.bubble-content ul {
+  list-style-type: disc; /* Bullets for unordered lists */
+}
+
+.bubble-content ol {
+  list-style-type: decimal; /* Numbers for ordered lists */
+}
+
+.bubble-content li {
+  margin: 5px 0; /* Space between list items */
+}
+
+.bubble-content p {
+  margin: 10px 0; /* Ensure paragraphs have some margin */
 }
