@@ -1,10 +1,29 @@
 'use client';
+import { auth } from '@/firebase';
+import { useRouter } from 'next/navigation';
+import { signOut } from 'firebase/auth';
+import {useAuthState} from 'react-firebase-hooks/auth';
 import { Box, Stack, Typography, TextField, Button } from '@mui/material';
 import { useState, useEffect, useRef } from 'react';
 import { marked } from 'marked';
 import './globals.css';
 
 export default function Home() {
+  const [user] = useAuthState(auth)
+  const router = useRouter()
+  const [userSession, setUserSession] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const session = sessionStorage.getItem('userId');
+      if (session) {
+        setUserSession(session);
+      } else if (!user) {
+        router.push('/sign-in');
+      }
+    }
+  }, [user, router]);
+
   const [messages, setMessages] = useState([{
     role: 'assistant',
     content: "Hi, I'm the Headstarter Support Agent. How can I assist you today?",
@@ -98,8 +117,16 @@ export default function Home() {
       >
         <Typography variant="h4">Headstarter AI</Typography>
         <Stack direction="row" spacing={2}>
-          <Button variant="contained" color="primary">Log In</Button>
-          <Button variant="outlined" color="primary">Sign Up</Button>
+          <Button 
+            variant="contained" 
+            color="primary"
+            onClick={() => {
+              signOut(auth)
+              sessionStorage.removeItem('userId')
+              }}
+            >
+              Log Out
+            </Button>
         </Stack>
       </Box>
 
