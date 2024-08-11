@@ -36,16 +36,31 @@ const SignUp = () => {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
+    <Box
+      sx={{
+        minHeight: '100vh',
+        backgroundImage: 'url("/ai-chatbot.jpg")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <Container 
+        component="main" 
+        maxWidth="xs"
         sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          backgroundColor: 'rgba(255, 255, 255, 0.85)',
+          padding: 4,
+          borderRadius: 2,
+          boxShadow: 3,
         }}
       >
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h4" align="center">
+          AI-Powered Chatbot for HeadStarterAI
+        </Typography>
+        <Typography component="h2" variant="h5" align="center" sx={{ mt: 2 }}>
           Sign Up
         </Typography>
         <Box component="form" onSubmit={handleSignUp} sx={{ mt: 3 }}>
@@ -95,8 +110,8 @@ const SignUp = () => {
             </Grid>
           </Grid>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </Box>
   )
 }
 
