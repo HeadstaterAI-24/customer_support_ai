@@ -34,56 +34,43 @@
   max-height: 100%;
 }
 
-/* Styles for assistant message bubble */
+/* Bubble content styling */
+.bubble-content {
+  padding: 12px; /* Padding inside the bubble */
+  border-radius: 12px; /* Rounded corners */
+  overflow-wrap: break-word; /* Ensure long words break */
+  word-break: break-word;
+  color: white;
+  margin: 8px 0; /* Space between bubbles */
+}
+
+/* Styling for assistant and user bubbles */
 .bubble-assistant {
   display: flex;
-  justify-content: flex-start;
-  margin-bottom: 8px;
+  justify-content: flex-start; /* Align to the left */
 }
 
 .bubble-assistant .bubble-content {
-  background-color: #1976d2; /* Change to desired color */
+  background-color: #1976d2; /* Assistant bubble color */
+  max-width: 90%; /* Limit the assistant bubble to 90% of the chat box */
   color: white;
-  border-radius: 16px;
-  padding: 20px; /* Increased padding for AI responses to 20px */
-  max-width: 90%;
-  overflow: hidden; /* Prevent overflow */
-  word-wrap: break-word; /* Ensure long words break */
-  word-break: break-word; /* Break words when necessary */
-  white-space: pre-wrap; /* Preserve spaces, but wrap as needed */
 }
 
-/* Styles for user message bubble */
 .bubble-user {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 8px;
+  justify-content: flex-end; /* Align to the right */
 }
 
 .bubble-user .bubble-content {
-  background-color: #9c27b0; /* Change to desired color */
+  background-color: #9c27b0; /* User bubble color */
+  max-width: 90%; /* Limit the user bubble to 90% of the chat box */
   color: white;
-  border-radius: 16px;
-  padding: 12px; /* Standard padding for user responses */
-  max-width: 90%;
-  overflow: hidden; /* Prevent overflow */
-  word-wrap: break-word; /* Ensure long words break */
-  word-break: break-word; /* Break words when necessary */
-  white-space: pre-wrap; /* Preserve spaces, but wrap as needed */
 }
 
-/* Ensure proper font size and line height inside bubbles */
-.bubble-content {
-  line-height: 1.6;
-  font-size: 16px;
-  margin: 0;
-  padding: 0;
-}
-
-/* Styles for lists inside bubbles */
+/* List styling inside bubbles */
 .bubble-content ul,
 .bubble-content ol {
-  padding-left: 20px; /* Indentation for list items */
+  padding-left: 25px; /* Indentation for list items */
   margin: 10px 0; /* Vertical spacing around the list */
 }
 
@@ -96,11 +83,9 @@
 }
 
 .bubble-content li {
-  margin: 5px 0; /* Spacing between list items */
+  margin: 5px 0; /* Space between list items */
 }
 
-/* Remove extra bullet points or markers */
-.bubble-content ul li::before,
-.bubble-content ol li::before {
-  content: ''; /* Remove extra bullets or numbers */
+.bubble-content p {
+  margin: 10px 0; /* Ensure paragraphs have some margin */
 }
